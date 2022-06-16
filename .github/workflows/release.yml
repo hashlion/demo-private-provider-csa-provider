@@ -14,6 +14,7 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
 jobs:
   goreleaser:
     runs-on: ubuntu-latest
@@ -48,3 +49,21 @@ jobs:
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
           # GitHub sets this automatically
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Upload assets
+        uses: actions/upload-artifact@v3
+        with:
+          name: provider
+          path: dist/*
+
+  deploytoprivateregistry:
+    name: Deploy to Private Registry
+    runs-on: ubuntu-latest
+    needs: goreleaser
+    steps:
+      - name: Run Curl Commands
+        shell: bash
+        run: |
+          echo "Here we go!"
+
+
