@@ -2,7 +2,7 @@ name: release
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 jobs:
   goreleaser:
     name: Build, Release and Publish Provider
@@ -17,7 +17,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version-file: 'go.mod'
+          go-version-file: "go.mod"
           cache: true
 
       - name: Import GPG key
@@ -31,14 +31,14 @@ jobs:
         uses: goreleaser/goreleaser-action@v3.0.0
         with:
           version: latest
-          args: release --rm-dist
+          args: release
         env:
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get Version
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-        
+
       - name: Push to Private Registry
         shell: bash
         run: .github/scripts/private-provider-release.sh -o "${{ secrets.TF_ORG }}" -u "${{ secrets.TF_URL }}" -v "${{ env.RELEASE_VERSION }}" -t "${{ secrets.TF_TOKEN }}" -p "demo"

@@ -106,6 +106,8 @@ providerVersion=$(curl -s \
 
 platformsJson=$(cat dist/artifacts.json)
 
+echo "platformsJson:\n$platformsJson"
+
 shasumsUploadUrl=$(echo $providerVersion | jq -r '.data.links."shasums-upload"')
 shasumsSigUploadUrl=$(echo $providerVersion | jq -r '.data.links."shasums-sig-upload"')
 
