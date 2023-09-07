@@ -31,10 +31,16 @@ jobs:
         uses: goreleaser/goreleaser-action@v3.0.0
         with:
           version: latest
-          args: release --rm-dist
+          args: release
         env:
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload assets
+        uses: actions/upload-artifact@v3
+        with:
+          name: myapp
+          path: dist/*
 
       - name: Get Version
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
